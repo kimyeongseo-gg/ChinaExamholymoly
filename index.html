@@ -5,201 +5,162 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>중국문화산책 암기테스트</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #ffffff; --bg2: #f5f5f5; --bg3: #ebebeb;
-    --text: #1a1a1a; --text2: #555; --text3: #999;
-    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
-    --blue: #1a73e8; --blue-bg: #e8f0fe; --blue-text: #1557b0;
-    --green: #188038; --green-bg: #e6f4ea; --green-text: #137333;
-    --red: #c5221f; --red-bg: #fce8e6; --red-text: #a50e0e;
-    --amber: #b06000; --amber-bg: #fef7e0; --amber-text: #8a4e00;
-    --radius: 10px; --radius-sm: 6px;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1c1c1e; --bg2: #2c2c2e; --bg3: #3a3a3c;
-      --text: #f0f0f0; --text2: #aaa; --text3: #666;
-      --border: rgba(255,255,255,0.12); --border2: rgba(255,255,255,0.22);
-      --blue: #4a9eff; --blue-bg: #1a2a4a; --blue-text: #7ab8ff;
-      --green: #34c759; --green-bg: #0a2a14; --green-text: #5dd87a;
-      --red: #ff453a; --red-bg: #2a0a08; --red-text: #ff6b63;
-      --amber: #ffa000; --amber-bg: #2a1a00; --amber-text: #ffb74d;
-    }
-  }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; }
-  .app { max-width: 720px; margin: 0 auto; padding: 1rem; }
-  .header { text-align: center; padding: 2rem 0 1.5rem; }
-  .header h1 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-  .header p { font-size: 13px; color: var(--text2); }
-  .header .subtitle { margin-top: 4px; font-size: 12px; color: var(--text3); }
-
-  /* 범위 선택 */
-  .range-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 1.5rem; }
-  .range-all { background: var(--bg); border: 1.5px solid var(--blue); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; font-size: 15px; font-weight: 700; color: var(--blue); text-align: center; transition: all 0.15s; }
-  .range-all:hover { background: var(--blue-bg); }
-  .range-sub-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .range-btn { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; cursor: pointer; font-size: 13px; color: var(--text); text-align: left; transition: all 0.15s; line-height: 1.4; }
-  .range-btn:hover { background: var(--bg2); border-color: var(--border2); }
-  .range-btn .range-title { font-weight: 600; display: block; margin-bottom: 2px; }
-  .range-btn .range-count { font-size: 11px; color: var(--text3); }
-  .range-btn.essay-btn { background: var(--amber-bg); border-color: var(--amber); color: var(--amber-text); grid-column: 1 / -1; text-align: center; }
-
-  /* 진행바 */
-  .progress-wrap { background: var(--bg); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 12px; }
-  .progress-bar { background: var(--bg3); border-radius: 999px; height: 8px; margin-bottom: 8px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.4s ease; }
-  .progress-info { display: flex; justify-content: space-between; align-items: center; }
-  .prog-label { font-size: 13px; color: var(--text2); }
-  .score-row { display: flex; gap: 6px; }
-  .badge { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
-  .badge-green { background: var(--green-bg); color: var(--green-text); }
-  .badge-red { background: var(--red-bg); color: var(--red-text); }
-
-  /* 문제 카드 */
-  .question-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; transition: border-color 0.2s; }
-  .question-card.answered-correct { border-left: 4px solid var(--green); }
-  .question-card.answered-wrong { border-left: 4px solid var(--red); }
-  .q-meta { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
-  .q-num { font-size: 11px; color: var(--text3); }
-  .tag { padding: 2px 7px; border-radius: 999px; font-size: 11px; font-weight: 600; }
-  .tag-both { background: var(--green-bg); color: var(--green-text); }
-  .tag-star { background: var(--amber-bg); color: var(--amber-text); }
-  .tag-pink { background: #fce4ec; color: #b71c50; }
-  .q-text { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 12px; line-height: 1.6; }
-  .essay-note { font-size: 12px; color: var(--text3); margin-top: -8px; margin-bottom: 10px; }
-  .answer-input { width: 100%; padding: 10px 13px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--bg2); color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; }
-  .answer-input:focus { border-color: var(--blue); background: var(--bg); }
-  .answer-input.correct-inp { border-color: var(--green); background: var(--green-bg); }
-  .answer-input.wrong-inp { border-color: var(--red); background: var(--red-bg); }
-  .answer-textarea { width: 100%; padding: 10px 13px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--bg2); color: var(--text); font-size: 14px; font-family: inherit; outline: none; resize: vertical; min-height: 100px; line-height: 1.6; transition: border-color 0.2s; }
-  .answer-textarea:focus { border-color: var(--blue); background: var(--bg); }
-  .reveal { margin-top: 10px; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--bg2); font-size: 13px; display: none; line-height: 1.7; }
-  .reveal.show { display: block; }
-  .reveal-correct { color: var(--green-text); font-weight: 600; }
-  .reveal-wrong { color: var(--red-text); font-weight: 600; }
-  .reveal-ans { color: var(--text); margin-top: 4px; }
-  .reveal-hint { color: var(--text2); font-size: 12px; margin-top: 4px; }
-  .btn-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-  .btn { padding: 8px 16px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--bg2); color: var(--text); cursor: pointer; font-size: 13px; font-family: inherit; transition: all 0.15s; }
-  .btn:hover { background: var(--bg3); }
-  .btn-primary { background: var(--blue); color: #fff; border-color: var(--blue); font-weight: 600; }
-  .btn-primary:hover { opacity: 0.88; }
-  .btn-hint { color: var(--text2); }
-
-  /* 하단 네비 */
-  .bottom-nav { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 16px; display: flex; gap: 8px; justify-content: center; margin-top: 1rem; border-radius: var(--radius) var(--radius) 0 0; flex-wrap: wrap; }
-
-  /* 결과 화면 */
-  .result-screen { display: none; background: var(--bg); border-radius: var(--radius); padding: 2.5rem 1.5rem; text-align: center; }
-  .result-screen.show { display: block; }
-  .result-pct { font-size: 56px; font-weight: 800; color: var(--blue); line-height: 1; margin-bottom: 8px; }
-  .result-msg { font-size: 16px; color: var(--text2); margin-bottom: 1.5rem; }
-  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
-  .result-stat { background: var(--bg2); border-radius: var(--radius); padding: 16px; }
-  .result-stat .num { font-size: 32px; font-weight: 700; }
-  .result-stat .lbl { font-size: 12px; color: var(--text2); margin-top: 2px; }
-  .result-stat.good .num { color: var(--green); }
-  .result-stat.bad .num { color: var(--red); }
-  .result-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-  .hidden { display: none !important; }
-
-  /* 통계 */
-  .stats-bar { background: var(--bg); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; font-size: 13px; flex-wrap: wrap; }
-  .stats-bar span { color: var(--text2); }
-  .stats-bar strong { color: var(--text); }
-
-  @media (max-width: 500px) {
-    .range-sub-grid { grid-template-columns: 1fr; }
-    .result-grid { grid-template-columns: 1fr; }
-    .header h1 { font-size: 19px; }
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#fff;--bg2:#f5f5f5;--bg3:#ebebeb;
+  --text:#1a1a1a;--text2:#555;--text3:#999;
+  --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);
+  --blue:#1a73e8;--blue-bg:#e8f0fe;--blue-text:#1557b0;
+  --green:#188038;--green-bg:#e6f4ea;--green-text:#137333;
+  --red:#c5221f;--red-bg:#fce8e6;--red-text:#a50e0e;
+  --amber:#b06000;--amber-bg:#fef7e0;--amber-text:#8a4e00;
+  --radius:10px;--radius-sm:6px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
+  --text:#f0f0f0;--text2:#aaa;--text3:#666;
+  --border:rgba(255,255,255,0.12);--border2:rgba(255,255,255,0.22);
+  --blue:#4a9eff;--blue-bg:#1a2a4a;--blue-text:#7ab8ff;
+  --green:#34c759;--green-bg:#0a2a14;--green-text:#5dd87a;
+  --red:#ff453a;--red-bg:#2a0a08;--red-text:#ff6b63;
+  --amber:#ffa000;--amber-bg:#2a1a00;--amber-text:#ffb74d;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;}
+.app{max-width:720px;margin:0 auto;padding:1rem;}
+.header{text-align:center;padding:2rem 0 1.5rem;}
+.header h1{font-size:22px;font-weight:700;margin-bottom:6px;}
+.header p{font-size:13px;color:var(--text2);}
+.header .sub{margin-top:4px;font-size:12px;color:var(--text3);}
+.range-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:1.5rem;}
+.range-all{background:var(--bg);border:1.5px solid var(--blue);border-radius:var(--radius);padding:14px 16px;cursor:pointer;font-size:15px;font-weight:700;color:var(--blue);text-align:center;transition:all .15s;}
+.range-all:hover{background:var(--blue-bg);}
+.range-sub{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.range-btn{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;font-size:13px;color:var(--text);text-align:left;transition:all .15s;line-height:1.4;}
+.range-btn:hover{background:var(--bg2);border-color:var(--border2);}
+.range-btn .rt{font-weight:600;display:block;margin-bottom:2px;}
+.range-btn .rc{font-size:11px;color:var(--text3);}
+.range-btn.essay-btn{background:var(--amber-bg);border-color:var(--amber);color:var(--amber-text);grid-column:1/-1;text-align:center;}
+.prog-wrap{background:var(--bg);border-radius:var(--radius);padding:12px 16px;margin-bottom:12px;}
+.prog-bar{background:var(--bg3);border-radius:999px;height:8px;margin-bottom:8px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--blue);border-radius:999px;transition:width .4s ease;}
+.prog-info{display:flex;justify-content:space-between;align-items:center;}
+.prog-label{font-size:13px;color:var(--text2);}
+.score-row{display:flex;gap:6px;}
+.badge{padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;}
+.badge-g{background:var(--green-bg);color:var(--green-text);}
+.badge-r{background:var(--red-bg);color:var(--red-text);}
+.qcard{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;transition:border-color .2s;scroll-margin-top:80px;}
+.qcard.ok{border-left:4px solid var(--green);}
+.qcard.no{border-left:4px solid var(--red);}
+.qcard.current{border:2px solid var(--blue);box-shadow:0 0 0 3px rgba(26,115,232,.1);}
+.q-meta{display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+.q-num{font-size:11px;color:var(--text3);}
+.tag{padding:2px 7px;border-radius:999px;font-size:11px;font-weight:600;}
+.tag-both{background:var(--green-bg);color:var(--green-text);}
+.tag-star{background:var(--amber-bg);color:var(--amber-text);}
+.tag-pink{background:#fce4ec;color:#b71c50;}
+.q-text{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.6;}
+.essay-note{font-size:12px;color:var(--text3);margin-top:-8px;margin-bottom:10px;}
+.ans-inp{width:100%;padding:10px 13px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg2);color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;}
+.ans-inp:focus{border-color:var(--blue);background:var(--bg);}
+.ans-inp.ok{border-color:var(--green);background:var(--green-bg);}
+.ans-inp.no{border-color:var(--red);background:var(--red-bg);}
+.ans-ta{width:100%;padding:10px 13px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg2);color:var(--text);font-size:14px;font-family:inherit;outline:none;resize:vertical;min-height:90px;line-height:1.6;transition:border-color .2s;}
+.ans-ta:focus{border-color:var(--blue);background:var(--bg);}
+.reveal{margin-top:10px;padding:12px 14px;border-radius:var(--radius-sm);background:var(--bg2);font-size:13px;display:none;line-height:1.7;}
+.reveal.show{display:block;}
+.rc-ok{color:var(--green-text);font-weight:600;}
+.rc-no{color:var(--red-text);font-weight:600;}
+.rc-ans{color:var(--text);margin-top:4px;}
+.rc-hint{color:var(--text2);font-size:12px;margin-top:4px;}
+.enter-hint{font-size:11px;color:var(--text3);margin-top:6px;text-align:center;}
+.btn-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.btn{padding:8px 16px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg2);color:var(--text);cursor:pointer;font-size:13px;font-family:inherit;transition:all .15s;}
+.btn:hover{background:var(--bg3);}
+.btn-p{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:600;}
+.btn-p:hover{opacity:.88;}
+.btn-h{color:var(--text2);}
+.bottom-nav{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:8px;justify-content:center;margin-top:1rem;border-radius:var(--radius) var(--radius) 0 0;flex-wrap:wrap;}
+.result-screen{display:none;background:var(--bg);border-radius:var(--radius);padding:2.5rem 1.5rem;}
+.result-screen.show{display:block;}
+.res-pct{font-size:56px;font-weight:800;color:var(--blue);line-height:1;margin-bottom:8px;text-align:center;}
+.res-msg{font-size:16px;color:var(--text2);margin-bottom:1.5rem;text-align:center;}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem;}
+.res-stat{background:var(--bg2);border-radius:var(--radius);padding:16px;text-align:center;}
+.res-stat .num{font-size:32px;font-weight:700;}
+.res-stat .lbl{font-size:12px;color:var(--text2);margin-top:2px;}
+.res-stat.good .num{color:var(--green);}
+.res-stat.bad .num{color:var(--red);}
+.res-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem;}
+.wrong-review{margin-top:1rem;}
+.wrong-review h3{font-size:15px;font-weight:600;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--red-text);}
+.wrong-item{background:var(--bg2);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--red);}
+.wrong-item .wq{font-size:14px;font-weight:600;margin-bottom:6px;color:var(--text);}
+.wrong-item .wa{font-size:13px;color:var(--green-text);font-weight:500;}
+.wrong-item .wh{font-size:12px;color:var(--text2);margin-top:3px;}
+.hidden{display:none!important;}
+@media(max-width:500px){.range-sub{grid-template-columns:1fr;}.res-grid{grid-template-columns:1fr;}.header h1{font-size:19px;}}
 </style>
 </head>
 <body>
 <div class="app">
   <div class="header">
     <h1>🇨🇳 중국문화산책 암기테스트</h1>
-    <p>계명대 윤창준 교수 | 에브리타임+분홍족보 통합</p>
-    <p class="subtitle">⭐🩷 = 두 족보 모두 출제 · ⭐ = 에브리타임 · 🩷 = 분홍족보</p>
+    <p>계명대 윤창준 교수 | 에브리타임+분홍족보 통합 147문제</p>
+    <p class="sub">⭐🩷 둘다출제 · ⭐ 에브리타임 · 🩷 분홍족보</p>
   </div>
 
-  <!-- 범위 선택 -->
   <div id="selector">
     <div class="range-grid">
-      <button class="range-all" onclick="startQuiz('all')">🔥 전체 범위 풀기 (모든 문제)</button>
-      <div class="range-sub-grid">
-        <button class="range-btn" onclick="startQuiz('1-5')">
-          <span class="range-title">1~5쪽</span>
-          <span class="range-count">지리·기본·시간차·기차·운하</span>
-        </button>
-        <button class="range-btn" onclick="startQuiz('6-10')">
-          <span class="range-title">6~10쪽</span>
-          <span class="range-count">산·문학·강·호수·만리장성</span>
-        </button>
-        <button class="range-btn" onclick="startQuiz('11-15')">
-          <span class="range-title">11~15쪽</span>
-          <span class="range-count">기념일·명절·춘절·단오·중추</span>
-        </button>
-        <button class="range-btn" onclick="startQuiz('16-20')">
-          <span class="range-title">16~20쪽</span>
-          <span class="range-count">음식문화·짜장면·4대요리</span>
-        </button>
-        <button class="range-btn" onclick="startQuiz('21-24')">
-          <span class="range-title">21~24쪽</span>
-          <span class="range-count">차문화·다경·보이차·오룡차</span>
-        </button>
-        <button class="range-btn" onclick="startQuiz('25-30')">
-          <span class="range-title">25~30쪽</span>
-          <span class="range-count">술문화·마오타이·경극</span>
-        </button>
-        <button class="range-btn" onclick="startQuiz('31-35')">
-          <span class="range-title">31~35쪽</span>
-          <span class="range-count">결혼·육례·여성해방·한자</span>
-        </button>
-        <button class="range-btn essay-btn" onclick="startQuiz('essay')">
-          📝 약술형 3대 단골 (서술형 연습)
-        </button>
+      <button class="range-all" onclick="startQuiz('all')">🔥 전체 범위 풀기 (147문제)</button>
+      <div class="range-sub">
+        <button class="range-btn" onclick="startQuiz('1-5')"><span class="rt">1~5쪽</span><span class="rc">지리·기본·시간차·기차·운하</span></button>
+        <button class="range-btn" onclick="startQuiz('6-10')"><span class="rt">6~10쪽</span><span class="rc">산·문학·강·호수·만리장성</span></button>
+        <button class="range-btn" onclick="startQuiz('11-15')"><span class="rt">11~15쪽</span><span class="rc">기념일·명절·춘절·단오·중추</span></button>
+        <button class="range-btn" onclick="startQuiz('16-20')"><span class="rt">16~20쪽</span><span class="rc">음식문화·짜장면·4대요리</span></button>
+        <button class="range-btn" onclick="startQuiz('21-24')"><span class="rt">21~24쪽</span><span class="rc">차문화·다경·보이차·오룡차</span></button>
+        <button class="range-btn" onclick="startQuiz('25-30')"><span class="rt">25~30쪽</span><span class="rc">술문화·마오타이·경극</span></button>
+        <button class="range-btn" onclick="startQuiz('31-35')"><span class="rt">31~35쪽</span><span class="rc">결혼·육례·여성해방·한자</span></button>
+        <button class="range-btn essay-btn" onclick="startQuiz('essay')">📝 약술형 3대 단골</button>
       </div>
     </div>
   </div>
 
-  <!-- 퀴즈 섹션 -->
   <div id="quiz-section" class="hidden">
-    <div class="progress-wrap">
-      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
-      <div class="progress-info">
+    <div class="prog-wrap">
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="prog-info">
         <span class="prog-label" id="prog-text">0 / 0</span>
         <div class="score-row">
-          <span class="badge badge-green" id="badge-ok">맞음 0</span>
-          <span class="badge badge-red" id="badge-no">틀림 0</span>
+          <span class="badge badge-g" id="badge-ok">맞음 0</span>
+          <span class="badge badge-r" id="badge-no">틀림 0</span>
         </div>
       </div>
     </div>
     <div id="q-container"></div>
     <div class="bottom-nav">
       <button class="btn" onclick="goBack()">← 범위 선택</button>
-      <button class="btn btn-primary" onclick="checkAll()">전체 채점하기 ✓</button>
+      <button class="btn btn-p" onclick="checkAll()">전체 채점하기 ✓</button>
     </div>
   </div>
 
-  <!-- 결과 섹션 -->
   <div class="result-screen" id="result-section">
-    <div class="result-pct" id="res-pct">0%</div>
-    <div class="result-msg" id="res-msg"></div>
-    <div class="result-grid">
-      <div class="result-stat good"><div class="num" id="res-ok">0</div><div class="lbl">맞은 문제</div></div>
-      <div class="result-stat bad"><div class="num" id="res-no">0</div><div class="lbl">틀린 문제</div></div>
+    <div class="res-pct" id="res-pct">0%</div>
+    <div class="res-msg" id="res-msg"></div>
+    <div class="res-grid">
+      <div class="res-stat good"><div class="num" id="res-ok">0</div><div class="lbl">맞은 문제</div></div>
+      <div class="res-stat bad"><div class="num" id="res-no">0</div><div class="lbl">틀린 문제</div></div>
     </div>
-    <div class="result-btns">
+    <div class="res-btns">
       <button class="btn" onclick="goBack()">← 범위 선택</button>
-      <button class="btn btn-primary" onclick="retryWrong()">틀린 문제만 다시 풀기 🔁</button>
+      <button class="btn btn-p" onclick="retryWrong()">틀린 문제만 다시 풀기 🔁</button>
     </div>
+    <div class="wrong-review" id="wrong-review"></div>
   </div>
 </div>
 
 <script>
-const Q = [
+const Q=[
   {r:'1-5',tag:'⭐🩷',q:'중국 영토는 남한의 몇 배인가?',a:'100배',h:'남한 기준'},
   {r:'1-5',tag:'🩷',q:'중국 영토는 한반도의 몇 배인가?',a:'50배',h:'한반도 기준'},
   {r:'1-5',tag:'🩷',q:'세계 영토 순위 1~3위를 순서대로 쓰시오',a:'러시아, 캐나다, 중국',h:'러시아 > 캐나다 > 중국'},
@@ -220,11 +181,10 @@ const Q = [
   {r:'1-5',tag:'🩷',q:'마카오는 언제 어느 나라로부터 반환받았는가?',a:'1999년 포르투갈',h:'1999.12.20'},
   {r:'1-5',tag:'⭐',q:'중국 기차 등급 중 가장 저렴하고 단거리에 이용하는 것은?',a:'YZ',h:'딱딱한 의자칸'},
   {r:'1-5',tag:'⭐🩷',q:'중국 지형 중 평원의 비율은 몇 %인가?',a:'12%',h:'동부'},
-  {r:'1-5',tag:'⭐🩷',q:'서고동저가 중국 문화에 끼친 영향을 서술하시오',a:'서쪽이 높고 동쪽이 낮아 강이 서→동으로 흐름. 강 유역 비옥한 토지 형성→농업·문명 발달. 북방 교통 불편→남북이 각기 고유 문화 형성',h:'3가지: 강 방향 / 농업발달 / 남북문화 분리',essay:true},
+  {r:'1-5',tag:'⭐🩷',q:'서고동저가 중국 문화에 끼친 영향을 서술하시오',a:'서쪽이 높고 동쪽이 낮아 강이 서→동으로 흐름. 강 유역 비옥한 토지 형성→농업·문명 발달. 북방 교통 불편→남북이 각기 고유 문화 형성',h:'강 방향 / 농업발달 / 남북문화 분리',essay:true},
   {r:'1-5',tag:'⭐',q:'경항대운하는 어느 도시와 어느 도시를 연결하는가?',a:'베이징(북경)~항저우(항주)',h:'수나라 때 완성'},
   {r:'1-5',tag:'⭐',q:'경항대운하는 몇 나라 때 완성되었는가?',a:'수나라',h:'세계 최초 가장 긴 운하'},
   {r:'1-5',tag:'⭐',q:'경항대운하의 총 길이는?',a:'1792km',h:'베이징~항저우'},
-
   {r:'6-10',tag:'⭐🩷',q:'투르판분지는 위구르어로 무슨 뜻인가?',a:'패인 땅',h:'중국에서 가장 낮은 곳'},
   {r:'6-10',tag:'⭐',q:'청장고원의 특징은? (황하와 관련지어)',a:'중국에서 가장 높은 곳, 황하의 발원지',h:'척박함'},
   {r:'6-10',tag:'⭐',q:'타림분지의 별명은?',a:'기름의 바다',h:'지하 대량 석유 매장'},
@@ -255,7 +215,6 @@ const Q = [
   {r:'6-10',tag:'⭐🩷',q:'만리장성의 서쪽 끝과 동쪽 끝은?',a:'서쪽=가욕관, 동쪽=산해관',h:'가욕관-산해관 2700km'},
   {r:'6-10',tag:'⭐🩷',q:'창어 유래 고사의 이름은?',a:'예사십일',h:'태양 10개→예가 9개 격추'},
   {r:'6-10',tag:'⭐🩷',q:'창어 유래를 약술하시오',a:'예사십일 고사 유래. 예가 태양 9개 격추→불사약→아내 창어(상아)가 훔쳐먹고 달로 도망→옥토끼와 삶→달 탐사선 이름을 창어로 명명',h:'예→창어→달→옥토끼→탐사선',essay:true},
-
   {r:'11-15',tag:'⭐🩷',q:'중국의 소수민족 수는?',a:'55개 (총 56개 민족)',h:'한족 92%'},
   {r:'11-15',tag:'⭐',q:'나시족이 사용하는 문자는?',a:'동파문자',h:'갑골문보다 오래됨'},
   {r:'11-15',tag:'⭐🩷',q:'춘절에 대문에 좋은 글귀를 적어 붙이는 것은?',a:'춘련',h:'10세기부터 시작'},
@@ -276,7 +235,6 @@ const Q = [
   {r:'11-15',tag:'🩷',q:'아동절은 몇 월 며칠인가?',a:'6월 1일',h:'세계 아동의 날'},
   {r:'11-15',tag:'⭐',q:'건당절(공산당 창립기념일)은 몇 월 며칠인가?',a:'7월 1일',h:'1921년 창립'},
   {r:'11-15',tag:'⭐',q:'건군절(인민해방군 창군일)은 몇 월 며칠인가?',a:'8월 1일',h:'인민해방군'},
-
   {r:'16-20',tag:'⭐🩷',q:'만두(만토우)와 관련된 역사 인물은?',a:'제갈량',h:'노수를 건널 때 오랑캐 머리 대신'},
   {r:'16-20',tag:'⭐',q:'만두와 포자의 차이는?',a:'만두=속 없음(밀가루만), 포자=속 있음',h:'빠오즈=포자'},
   {r:'16-20',tag:'⭐🩷',q:'한국 최초의 짜장면집 이름과 위치는?',a:'공화춘, 인천 차이나타운',h:'청나라 때'},
@@ -292,7 +250,6 @@ const Q = [
   {r:'16-20',tag:'⭐🩷',q:'질투를 식초를 마신다고 표현하게 된 유래는?',a:'당태종이 임환 아내에게 독주를 마시라 했는데 사실 식초였음. 이후 질투=식초를 마신다고 표현.',h:'당태종·임환 이야기'},
   {r:'16-20',tag:'🩷',q:'중국 식사에서 음식 먹는 순서는?',a:'요리→주식(밥)→탕',h:'탕은 마지막'},
   {r:'16-20',tag:'⭐🩷',q:'근대 인기 혼수 3전은?',a:'선풍기, 자전거, 재봉틀',h:'20세기 초반'},
-
   {r:'21-24',tag:'⭐🩷',q:'다경을 쓴 사람과 그의 별명은?',a:'육우, 다성(차의 성인)',h:'차의 백과사전'},
   {r:'21-24',tag:'⭐',q:'차를 최초로 발견한 전설 속 인물은?',a:'신농',h:'72가지 독 해독'},
   {r:'21-24',tag:'⭐',q:'다이어트 차로 유명한 후발효차는?',a:'보이차',h:'운남성 보이 마을'},
@@ -305,7 +262,6 @@ const Q = [
   {r:'21-24',tag:'⭐',q:'후발효차의 대표는?',a:'보이차(흑차)',h:'곰팡이로 재발효'},
   {r:'21-24',tag:'🩷',q:'물고기 머리는 항상 어느 쪽으로 향하는가?',a:'손님 쪽',h:'식사 예절'},
   {r:'21-24',tag:'🩷',q:'숟가락으로는 무엇을, 젓가락으로는 무엇을 먹는가?',a:'숟가락=탕, 젓가락=면·쌀밥',h:'수저 사용법'},
-
   {r:'25-30',tag:'⭐🩷',q:'소흥주를 20년 이상 숙성시키면 무엇이라 부르는가?',a:'여아홍',h:'딸 태어날 때 담가 결혼 때 마심'},
   {r:'25-30',tag:'⭐',q:'여아홍의 유래는?',a:'딸이 태어날 때 담가 결혼할 때 꺼내 마시는 술',h:'여(女)아(兒)홍(紅)'},
   {r:'25-30',tag:'⭐🩷',q:'중국의 국주는?',a:'마오타이(모태주)',h:'귀주성, 53도'},
@@ -327,7 +283,6 @@ const Q = [
   {r:'25-30',tag:'⭐',q:'매란방을 극찬한 서양 유명인은?',a:'찰리 채플린',h:'최고의 여장 연기자'},
   {r:'25-30',tag:'⭐🩷',q:'유명 경극 영화는?',a:'패왕별희',h:'장국영·공리 주연, 항우와 우희'},
   {r:'25-30',tag:'🩷',q:'희곡의 기원은?',a:'고대 무격',h:'신의 모습으로 분장하고 춤추고 노래'},
-
   {r:'31-35',tag:'⭐🩷',q:'중국 봉건사회의 3대 악습은?',a:'전족, 환관, 과거제도',h:'3개 모두'},
   {r:'31-35',tag:'⭐🩷',q:'전족이란 무엇인가?',a:'여성의 발을 어릴 때부터 성장하지 못하도록 꽁꽁 동여매던 풍습',h:'봉건시대 유물'},
   {r:'31-35',tag:'🩷',q:'삼촌금련이란 무엇인가?',a:'전족한 발은 세 치의 금 연꽃, 약 10cm',h:'전족한 발 크기'},
@@ -350,13 +305,12 @@ const Q = [
   {r:'31-35',tag:'🩷',q:'예서를 만든 진나라 인물은?',a:'정막',h:'하급 관리 실용 문자'},
   {r:'31-35',tag:'⭐',q:'가장 모범적인 한자체는?',a:'해서',h:'오늘날 사용'},
   {r:'31-35',tag:'⭐',q:'예서를 빠르게 휘갈겨 쓴 것은?',a:'초서',h:'알아보기 힘들어 서예로'},
-
   {r:'essay',tag:'⭐🩷',q:'[약술형] 창어 유래를 서술하시오',a:'예사십일 고사에서 유래. 하루에 태양이 10개 떠올라 예가 활로 9개를 쏘아 떨어뜨렸고 옥황상제에게 불사약을 받았다. 예의 아내 창어(상아)가 약을 몰래 훔쳐 먹고 달나라로 도망가 옥토끼와 함께 살게 되었다. 이 전설 속 인물 이름을 따서 달 탐사선을 창어라고 명명하였다.',h:'예사십일→예→창어→달→옥토끼→탐사선',essay:true},
   {r:'essay',tag:'⭐🩷',q:'[약술형] 단오절에 쫑즈를 먹고 용주경기를 하는 역사적 배경을 서술하시오',a:'초나라 애국시인 굴원이 억울한 누명을 쓰고 음력 5월 5일 멱라강에 투신하였다. 마을 사람들이 배를 저어 시신을 찾으러 갔으나 구하지 못했고(용주경기 유래), 물고기가 시신을 훼손하지 못하도록 강에 먹이를 던졌다(쫑즈 유래).',h:'굴원→멱라강→용주경기→쫑즈',essay:true},
   {r:'essay',tag:'⭐🩷',q:'[약술형] 서고동저 지형이 중국 문화에 끼친 영향을 서술하시오',a:'서쪽이 높고 동쪽이 낮은 서고동저 4급계 지형으로, 대부분의 강이 서쪽에서 동쪽으로 흐른다. 강 유역에 비옥한 토지가 형성되어 농업과 문명이 발달하였다. 북방 지역은 교통이 불편해 남방과 북방이 각기 고유한 문화를 형성하게 되었다.',h:'서→동 / 농업발달 / 남북문화 분리',essay:true},
 ];
 
-let curQs=[], ans={}, wrongList=[];
+let curQs=[],ans={},wrongList=[],curIdx=0;
 
 function tagHTML(t){
   if(t==='⭐🩷') return '<span class="tag tag-both">⭐🩷 둘다출제</span>';
@@ -365,45 +319,76 @@ function tagHTML(t){
 }
 
 function startQuiz(range){
-  ans={}; wrongList=[];
-  curQs = (range==='all'?[...Q]:Q.filter(q=>q.r===range)).sort(()=>Math.random()-0.5);
+  ans={}; wrongList=[]; curIdx=0;
+  curQs=(range==='all'?[...Q]:Q.filter(q=>q.r===range)).sort(()=>Math.random()-0.5);
   renderQuiz();
 }
 
 function retryWrong(){
   if(!wrongList.length){goBack();return;}
   curQs=[...wrongList].sort(()=>Math.random()-0.5);
-  ans={}; wrongList=[];
+  ans={}; wrongList=[]; curIdx=0;
   renderQuiz();
 }
 
 function renderQuiz(){
-  show('quiz-section'); hide('selector'); hide('result-section');
+  show('quiz-section'); hide('selector');
+  document.getElementById('result-section').classList.remove('show');
   updateProg(0,0);
   const c=document.getElementById('q-container');
   c.innerHTML='';
   curQs.forEach((q,i)=>{
     const d=document.createElement('div');
-    d.className='question-card'; d.id='qc'+i;
-    const inp = q.essay
-      ? `<textarea class="answer-textarea" id="ans${i}" placeholder="서술형 답안을 입력하세요..."></textarea>`
-      : `<input class="answer-input" type="text" id="ans${i}" placeholder="정답을 입력하세요..." onkeydown="if(event.key==='Enter')checkOne(${i})">`;
-    const essayNote = q.essay ? `<div class="essay-note">📝 서술형 — 핵심 키워드 위주로 작성 후 채점 버튼을 눌러 모범답안과 비교하세요</div>` : '';
+    d.className='qcard'+(i===0?' current':''); d.id='qc'+i;
+    const inp=q.essay
+      ? `<textarea class="ans-ta" id="ans${i}" placeholder="서술형 답안을 입력하세요..."></textarea>`
+      : `<input class="ans-inp" type="text" id="ans${i}" placeholder="정답을 입력하세요..." onkeydown="handleKey(event,${i})">`;
+    const enote=q.essay?`<div class="essay-note">📝 서술형 — 핵심 키워드 위주로 작성 후 확인 버튼 클릭</div>`:'';
+    const ehint=!q.essay?`<div class="enter-hint">⏎ 엔터로 채점 후 다음 문제로 이동</div>`:'';
     d.innerHTML=`
       <div class="q-meta">${tagHTML(q.tag)}<span class="q-num">문제 ${i+1}/${curQs.length}</span></div>
       <div class="q-text">${q.q}</div>
-      ${essayNote}
-      ${inp}
+      ${enote}${inp}${ehint}
       <div class="reveal" id="rv${i}"></div>
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="checkOne(${i})">확인 ✓</button>
-        <button class="btn btn-hint" onclick="showHint(${i})">💡 힌트</button>
+        <button class="btn btn-p" onclick="checkOne(${i})">확인 ✓</button>
+        <button class="btn btn-h" onclick="showHint(${i})">💡 힌트</button>
       </div>`;
     c.appendChild(d);
   });
+  // 첫 문제 포커스
+  setTimeout(()=>{const el=document.getElementById('ans0');if(el)el.focus();},100);
 }
 
-function norm(s){return s.replace(/\s+/g,'').replace(/[,·~→\-·。]/g,'').toLowerCase();}
+function handleKey(e,i){
+  if(e.key==='Enter'){
+    e.preventDefault();
+    if(ans[i]===undefined){
+      checkOne(i);
+    } else {
+      scrollToNext(i);
+    }
+  }
+}
+
+function scrollToNext(i){
+  const next=i+1;
+  if(next<curQs.length){
+    const nc=document.getElementById('qc'+next);
+    if(nc){
+      // 현재 카드 current 클래스 제거, 다음 카드 추가
+      document.querySelectorAll('.qcard.current').forEach(el=>el.classList.remove('current'));
+      nc.classList.add('current');
+      nc.scrollIntoView({behavior:'smooth',block:'center'});
+      setTimeout(()=>{const el=document.getElementById('ans'+next);if(el&&!el.disabled)el.focus();},400);
+    }
+  } else {
+    // 마지막 문제면 채점
+    showResult();
+  }
+}
+
+function norm(s){return s.replace(/\s+/g,'').replace(/[,·~→\-。]/g,'').toLowerCase();}
 
 function checkOne(i){
   if(ans[i]!==undefined) return;
@@ -413,61 +398,81 @@ function checkOne(i){
   const user=inp.value.trim();
   const correct=curQs[i].a;
   const isEssay=!!curQs[i].essay;
-
   let ok=false;
-  if(!isEssay && user.length>0){
-    const nu=norm(user), nc=norm(correct);
-    ok = nu===nc || nc.includes(nu) || nu.includes(nc.substring(0,Math.floor(nc.length*0.65)));
+  if(!isEssay&&user.length>0){
+    const nu=norm(user),nc=norm(correct);
+    ok=nu===nc||nc.includes(nu)||nu.includes(nc.substring(0,Math.floor(nc.length*0.65)));
   }
-
   if(isEssay){
     ans[i]='essay';
-    rv.innerHTML=`<div style="margin-bottom:6px;font-weight:600;color:var(--blue)">📋 모범답안</div><div style="line-height:1.8">${correct}</div><div class="reveal-hint">💡 ${curQs[i].h}</div>`;
+    rv.innerHTML=`<div style="margin-bottom:6px;font-weight:600;color:var(--blue)">📋 모범답안</div><div style="line-height:1.8">${correct}</div><div class="rc-hint">💡 ${curQs[i].h}</div>`;
     rv.classList.add('show');
     inp.disabled=true;
+    card.classList.remove('current');
+    scrollToNext(i);
   } else {
     ans[i]=ok;
     if(!ok) wrongList.push(curQs[i]);
     inp.disabled=true;
-    inp.classList.add(ok?'correct-inp':'wrong-inp');
-    card.classList.add(ok?'answered-correct':'answered-wrong');
+    inp.classList.add(ok?'ok':'no');
+    card.classList.add(ok?'ok':'no');
     rv.innerHTML=ok
-      ? `<span class="reveal-correct">✓ 정답!</span><div class="reveal-ans">모범답안: ${correct}</div>`
-      : `<span class="reveal-wrong">✗ 틀렸습니다</span><div class="reveal-ans" style="color:var(--green-text);font-weight:600">정답: ${correct}</div><div class="reveal-hint">💡 ${curQs[i].h}</div>`;
+      ?`<span class="rc-ok">✓ 정답!</span><div class="rc-ans">모범답안: ${correct}</div><div class="rc-hint">⏎ 엔터 → 다음 문제</div>`
+      :`<span class="rc-no">✗ 틀렸습니다</span><div class="rc-ans" style="color:var(--green-text);font-weight:600">정답: ${correct}</div><div class="rc-hint">💡 ${curQs[i].h} · ⏎ 엔터 → 다음 문제</div>`;
     rv.classList.add('show');
     const done=Object.keys(ans).length;
     const okC=Object.values(ans).filter(v=>v===true).length;
     updateProg(done,okC);
+    // 엔터로 다음 문제 이동을 위해 input에 포커스 유지
+    inp.focus();
   }
 }
 
 function showHint(i){
   if(ans[i]!==undefined) return;
   const rv=document.getElementById('rv'+i);
-  rv.innerHTML=`<span class="reveal-hint">💡 힌트: ${curQs[i].h}</span>`;
+  rv.innerHTML=`<span class="rc-hint">💡 힌트: ${curQs[i].h}</span>`;
   rv.classList.add('show');
 }
 
 function checkAll(){
-  curQs.forEach((_,i)=>{ if(ans[i]===undefined){ const inp=document.getElementById('ans'+i); if(inp&&!inp.disabled) checkOne(i); }});
+  curQs.forEach((_,i)=>{if(ans[i]===undefined){const el=document.getElementById('ans'+i);if(el&&!el.disabled)checkOne(i);}});
   showResult();
 }
 
 function showResult(){
   const total=curQs.length;
   const correct=Object.values(ans).filter(v=>v===true).length;
-  const essayCount=Object.values(ans).filter(v=>v==='essay').length;
-  const gradable=total-essayCount;
+  const essayC=Object.values(ans).filter(v=>v==='essay').length;
+  const gradable=total-essayC;
   const pct=gradable>0?Math.round((correct/gradable)*100):100;
   hide('quiz-section');
   const rs=document.getElementById('result-section');
   rs.classList.add('show');
   document.getElementById('res-pct').textContent=pct+'%';
-  document.getElementById('res-ok').textContent=correct+(essayCount>0?' (+'+essayCount+'서술형)':'');
+  document.getElementById('res-ok').textContent=correct+(essayC>0?' (+'+essayC+'서술형)':'');
   document.getElementById('res-no').textContent=gradable-correct;
-  const msgs=['다시 한번 암기하고 도전해봐! 🔥','절반 왔어! 한 번 더 돌리면 돼 🔁','잘 하고 있어! 틀린 것만 다시 보자 📖','거의 다 왔어! 마지막 점검 💪','완벽해! 시험 잘 볼 수 있어 🎉'];
+  const msgs=['다시 한번 암기하고 도전! 🔥','절반! 한 번 더 돌리면 돼 🔁','잘 하고 있어! 틀린 것만 다시 📖','거의 다! 마지막 점검 💪','완벽해! 시험 고고 🎉'];
   document.getElementById('res-msg').textContent=msgs[Math.min(4,Math.floor(pct/20))];
-  wrongList=[...new Set(wrongList)];
+
+  // 틀린 문제 목록
+  const wr=document.getElementById('wrong-review');
+  const uniq=[...new Map(wrongList.map(q=>[q.q,q])).values()];
+  wrongList=uniq;
+  if(uniq.length===0){
+    wr.innerHTML='';
+    return;
+  }
+  let html=`<h3>❌ 틀린 문제 ${uniq.length}개 — 한 번 더 확인!</h3>`;
+  uniq.forEach((q,i)=>{
+    html+=`<div class="wrong-item">
+      <div class="wq">${i+1}. ${q.q}</div>
+      <div class="wa">✓ 정답: ${q.a}</div>
+      <div class="wh">💡 ${q.h}</div>
+    </div>`;
+  });
+  wr.innerHTML=html;
+  rs.scrollTop=0;
 }
 
 function updateProg(done,ok){
@@ -482,8 +487,8 @@ function updateProg(done,ok){
 function show(id){document.getElementById(id).classList.remove('hidden');}
 function hide(id){document.getElementById(id).classList.add('hidden');}
 function goBack(){
-  ans={}; wrongList=[];
-  hide('quiz-section'); hide('result-section');
+  ans={}; wrongList=[]; curIdx=0;
+  hide('quiz-section');
   document.getElementById('result-section').classList.remove('show');
   show('selector');
   document.getElementById('q-container').innerHTML='';
