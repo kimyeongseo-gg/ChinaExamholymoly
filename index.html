@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>중국문화산책 암기테스트</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #f5f5f5; --bg3: #ebebeb;
+    --text: #1a1a1a; --text2: #555; --text3: #999;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --blue: #1a73e8; --blue-bg: #e8f0fe; --blue-text: #1557b0;
+    --green: #188038; --green-bg: #e6f4ea; --green-text: #137333;
+    --red: #c5221f; --red-bg: #fce8e6; --red-text: #a50e0e;
+    --amber: #b06000; --amber-bg: #fef7e0; --amber-text: #8a4e00;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --bg2: #2c2c2e; --bg3: #3a3a3c;
+      --text: #f0f0f0; --text2: #aaa; --text3: #666;
+      --border: rgba(255,255,255,0.12); --border2: rgba(255,255,255,0.22);
+      --blue: #4a9eff; --blue-bg: #1a2a4a; --blue-text: #7ab8ff;
+      --green: #34c759; --green-bg: #0a2a14; --green-text: #5dd87a;
+      --red: #ff453a; --red-bg: #2a0a08; --red-text: #ff6b63;
+      --amber: #ffa000; --amber-bg: #2a1a00; --amber-text: #ffb74d;
+    }
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; }
+  .app { max-width: 720px; margin: 0 auto; padding: 1rem; }
+  .header { text-align: center; padding: 2rem 0 1.5rem; }
+  .header h1 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .header p { font-size: 13px; color: var(--text2); }
+  .header .subtitle { margin-top: 4px; font-size: 12px; color: var(--text3); }
+
+  /* 범위 선택 */
+  .range-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 1.5rem; }
+  .range-all { background: var(--bg); border: 1.5px solid var(--blue); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; font-size: 15px; font-weight: 700; color: var(--blue); text-align: center; transition: all 0.15s; }
+  .range-all:hover { background: var(--blue-bg); }
+  .range-sub-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .range-btn { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; cursor: pointer; font-size: 13px; color: var(--text); text-align: left; transition: all 0.15s; line-height: 1.4; }
+  .range-btn:hover { background: var(--bg2); border-color: var(--border2); }
+  .range-btn .range-title { font-weight: 600; display: block; margin-bottom: 2px; }
+  .range-btn .range-count { font-size: 11px; color: var(--text3); }
+  .range-btn.essay-btn { background: var(--amber-bg); border-color: var(--amber); color: var(--amber-text); grid-column: 1 / -1; text-align: center; }
+
+  /* 진행바 */
+  .progress-wrap { background: var(--bg); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 12px; }
+  .progress-bar { background: var(--bg3); border-radius: 999px; height: 8px; margin-bottom: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.4s ease; }
+  .progress-info { display: flex; justify-content: space-between; align-items: center; }
+  .prog-label { font-size: 13px; color: var(--text2); }
+  .score-row { display: flex; gap: 6px; }
+  .badge { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .badge-green { background: var(--green-bg); color: var(--green-text); }
+  .badge-red { background: var(--red-bg); color: var(--red-text); }
+
+  /* 문제 카드 */
+  .question-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; transition: border-color 0.2s; }
+  .question-card.answered-correct { border-left: 4px solid var(--green); }
+  .question-card.answered-wrong { border-left: 4px solid var(--red); }
+  .q-meta { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+  .q-num { font-size: 11px; color: var(--text3); }
+  .tag { padding: 2px 7px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  .tag-both { background: var(--green-bg); color: var(--green-text); }
+  .tag-star { background: var(--amber-bg); color: var(--amber-text); }
+  .tag-pink { background: #fce4ec; color: #b71c50; }
+  .q-text { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 12px; line-height: 1.6; }
+  .essay-note { font-size: 12px; color: var(--text3); margin-top: -8px; margin-bottom: 10px; }
+  .answer-input { width: 100%; padding: 10px 13px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--bg2); color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+  .answer-input:focus { border-color: var(--blue); background: var(--bg); }
+  .answer-input.correct-inp { border-color: var(--green); background: var(--green-bg); }
+  .answer-input.wrong-inp { border-color: var(--red); background: var(--red-bg); }
+  .answer-textarea { width: 100%; padding: 10px 13px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--bg2); color: var(--text); font-size: 14px; font-family: inherit; outline: none; resize: vertical; min-height: 100px; line-height: 1.6; transition: border-color 0.2s; }
+  .answer-textarea:focus { border-color: var(--blue); background: var(--bg); }
+  .reveal { margin-top: 10px; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--bg2); font-size: 13px; display: none; line-height: 1.7; }
+  .reveal.show { display: block; }
+  .reveal-correct { color: var(--green-text); font-weight: 600; }
+  .reveal-wrong { color: var(--red-text); font-weight: 600; }
+  .reveal-ans { color: var(--text); margin-top: 4px; }
+  .reveal-hint { color: var(--text2); font-size: 12px; margin-top: 4px; }
+  .btn-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .btn { padding: 8px 16px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--bg2); color: var(--text); cursor: pointer; font-size: 13px; font-family: inherit; transition: all 0.15s; }
+  .btn:hover { background: var(--bg3); }
+  .btn-primary { background: var(--blue); color: #fff; border-color: var(--blue); font-weight: 600; }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-hint { color: var(--text2); }
+
+  /* 하단 네비 */
+  .bottom-nav { position: sticky; bottom: 0; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 16px; display: flex; gap: 8px; justify-content: center; margin-top: 1rem; border-radius: var(--radius) var(--radius) 0 0; flex-wrap: wrap; }
+
+  /* 결과 화면 */
+  .result-screen { display: none; background: var(--bg); border-radius: var(--radius); padding: 2.5rem 1.5rem; text-align: center; }
+  .result-screen.show { display: block; }
+  .result-pct { font-size: 56px; font-weight: 800; color: var(--blue); line-height: 1; margin-bottom: 8px; }
+  .result-msg { font-size: 16px; color: var(--text2); margin-bottom: 1.5rem; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  .result-stat { background: var(--bg2); border-radius: var(--radius); padding: 16px; }
+  .result-stat .num { font-size: 32px; font-weight: 700; }
+  .result-stat .lbl { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .result-stat.good .num { color: var(--green); }
+  .result-stat.bad .num { color: var(--red); }
+  .result-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .hidden { display: none !important; }
+
+  /* 통계 */
+  .stats-bar { background: var(--bg); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; font-size: 13px; flex-wrap: wrap; }
+  .stats-bar span { color: var(--text2); }
+  .stats-bar strong { color: var(--text); }
+
+  @media (max-width: 500px) {
+    .range-sub-grid { grid-template-columns: 1fr; }
+    .result-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>🇨🇳 중국문화산책 암기테스트</h1>
+    <p>계명대 윤창준 교수 | 에브리타임+분홍족보 통합</p>
+    <p class="subtitle">⭐🩷 = 두 족보 모두 출제 · ⭐ = 에브리타임 · 🩷 = 분홍족보</p>
+  </div>
+
+  <!-- 범위 선택 -->
+  <div id="selector">
+    <div class="range-grid">
+      <button class="range-all" onclick="startQuiz('all')">🔥 전체 범위 풀기 (모든 문제)</button>
+      <div class="range-sub-grid">
+        <button class="range-btn" onclick="startQuiz('1-5')">
+          <span class="range-title">1~5쪽</span>
+          <span class="range-count">지리·기본·시간차·기차·운하</span>
+        </button>
+        <button class="range-btn" onclick="startQuiz('6-10')">
+          <span class="range-title">6~10쪽</span>
+          <span class="range-count">산·문학·강·호수·만리장성</span>
+        </button>
+        <button class="range-btn" onclick="startQuiz('11-15')">
+          <span class="range-title">11~15쪽</span>
+          <span class="range-count">기념일·명절·춘절·단오·중추</span>
+        </button>
+        <button class="range-btn" onclick="startQuiz('16-20')">
+          <span class="range-title">16~20쪽</span>
+          <span class="range-count">음식문화·짜장면·4대요리</span>
+        </button>
+        <button class="range-btn" onclick="startQuiz('21-24')">
+          <span class="range-title">21~24쪽</span>
+          <span class="range-count">차문화·다경·보이차·오룡차</span>
+        </button>
+        <button class="range-btn" onclick="startQuiz('25-30')">
+          <span class="range-title">25~30쪽</span>
+          <span class="range-count">술문화·마오타이·경극</span>
+        </button>
+        <button class="range-btn" onclick="startQuiz('31-35')">
+          <span class="range-title">31~35쪽</span>
+          <span class="range-count">결혼·육례·여성해방·한자</span>
+        </button>
+        <button class="range-btn essay-btn" onclick="startQuiz('essay')">
+          📝 약술형 3대 단골 (서술형 연습)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 퀴즈 섹션 -->
+  <div id="quiz-section" class="hidden">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="progress-info">
+        <span class="prog-label" id="prog-text">0 / 0</span>
+        <div class="score-row">
+          <span class="badge badge-green" id="badge-ok">맞음 0</span>
+          <span class="badge badge-red" id="badge-no">틀림 0</span>
+        </div>
+      </div>
+    </div>
+    <div id="q-container"></div>
+    <div class="bottom-nav">
+      <button class="btn" onclick="goBack()">← 범위 선택</button>
+      <button class="btn btn-primary" onclick="checkAll()">전체 채점하기 ✓</button>
+    </div>
+  </div>
+
+  <!-- 결과 섹션 -->
+  <div class="result-screen" id="result-section">
+    <div class="result-pct" id="res-pct">0%</div>
+    <div class="result-msg" id="res-msg"></div>
+    <div class="result-grid">
+      <div class="result-stat good"><div class="num" id="res-ok">0</div><div class="lbl">맞은 문제</div></div>
+      <div class="result-stat bad"><div class="num" id="res-no">0</div><div class="lbl">틀린 문제</div></div>
+    </div>
+    <div class="result-btns">
+      <button class="btn" onclick="goBack()">← 범위 선택</button>
+      <button class="btn btn-primary" onclick="retryWrong()">틀린 문제만 다시 풀기 🔁</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const Q = [
+  {r:'1-5',tag:'⭐🩷',q:'중국 영토는 남한의 몇 배인가?',a:'100배',h:'남한 기준'},
+  {r:'1-5',tag:'🩷',q:'중국 영토는 한반도의 몇 배인가?',a:'50배',h:'한반도 기준'},
+  {r:'1-5',tag:'🩷',q:'세계 영토 순위 1~3위를 순서대로 쓰시오',a:'러시아, 캐나다, 중국',h:'러시아 > 캐나다 > 중국'},
+  {r:'1-5',tag:'⭐🩷',q:'중국의 소수민족은 몇 개인가?',a:'55개',h:'총 56개 민족'},
+  {r:'1-5',tag:'🩷',q:'중국의 한족 비율은?',a:'92%',h:'소수민족 8.5%'},
+  {r:'1-5',tag:'🩷',q:'원나라를 통치한 민족은?',a:'몽골족',h:'원나라=몽골족'},
+  {r:'1-5',tag:'🩷',q:'청나라를 통치한 민족은?',a:'만주족',h:'청나라=만주족'},
+  {r:'1-5',tag:'⭐🩷',q:'중국의 동서 경도 차이는 몇 도인가?',a:'60도',h:'5200km'},
+  {r:'1-5',tag:'⭐🩷',q:'중국의 시간차는 몇 시간이지만, 어느 시각으로 통일했는가?',a:'4시간, 베이징(북경)',h:'경도차 60도 → 4시간'},
+  {r:'1-5',tag:'⭐',q:'중국의 지리적 중심 도시는?',a:'난주(란저우)',h:'감숙성(간쑤성)'},
+  {r:'1-5',tag:'⭐',q:'난주를 중심으로 반지름 몇 km인 원이 중국 전체를 포함하는가?',a:'2500km',h:'중국 전체'},
+  {r:'1-5',tag:'⭐',q:'중국 최서단은?',a:'파미르 고원',h:'동경 73도'},
+  {r:'1-5',tag:'⭐',q:'중국 최북단은?',a:'흑룡강',h:'북위 53도'},
+  {r:'1-5',tag:'🩷',q:'중국 최동단은?',a:'헤이룽강과 우수리강 항로가 만나는 곳',h:'동경 135도'},
+  {r:'1-5',tag:'⭐',q:'중국의 남과 북을 나누는 기준은?',a:'벼농사 가능 여부',h:'남북분계선'},
+  {r:'1-5',tag:'⭐🩷',q:'중국의 4대 직할시를 모두 쓰시오',a:'베이징, 톈진, 충칭, 상하이',h:'4개 모두'},
+  {r:'1-5',tag:'🩷',q:'홍콩은 언제 어느 나라로부터 반환받았는가?',a:'1997년 영국',h:'1997.7.1'},
+  {r:'1-5',tag:'🩷',q:'마카오는 언제 어느 나라로부터 반환받았는가?',a:'1999년 포르투갈',h:'1999.12.20'},
+  {r:'1-5',tag:'⭐',q:'중국 기차 등급 중 가장 저렴하고 단거리에 이용하는 것은?',a:'YZ',h:'딱딱한 의자칸'},
+  {r:'1-5',tag:'⭐🩷',q:'중국 지형 중 평원의 비율은 몇 %인가?',a:'12%',h:'동부'},
+  {r:'1-5',tag:'⭐🩷',q:'서고동저가 중국 문화에 끼친 영향을 서술하시오',a:'서쪽이 높고 동쪽이 낮아 강이 서→동으로 흐름. 강 유역 비옥한 토지 형성→농업·문명 발달. 북방 교통 불편→남북이 각기 고유 문화 형성',h:'3가지: 강 방향 / 농업발달 / 남북문화 분리',essay:true},
+  {r:'1-5',tag:'⭐',q:'경항대운하는 어느 도시와 어느 도시를 연결하는가?',a:'베이징(북경)~항저우(항주)',h:'수나라 때 완성'},
+  {r:'1-5',tag:'⭐',q:'경항대운하는 몇 나라 때 완성되었는가?',a:'수나라',h:'세계 최초 가장 긴 운하'},
+  {r:'1-5',tag:'⭐',q:'경항대운하의 총 길이는?',a:'1792km',h:'베이징~항저우'},
+
+  {r:'6-10',tag:'⭐🩷',q:'투르판분지는 위구르어로 무슨 뜻인가?',a:'패인 땅',h:'중국에서 가장 낮은 곳'},
+  {r:'6-10',tag:'⭐',q:'청장고원의 특징은? (황하와 관련지어)',a:'중국에서 가장 높은 곳, 황하의 발원지',h:'척박함'},
+  {r:'6-10',tag:'⭐',q:'타림분지의 별명은?',a:'기름의 바다',h:'지하 대량 석유 매장'},
+  {r:'6-10',tag:'⭐🩷',q:'타클라마칸 사막은 위구르어로 무슨 뜻인가?',a:'한 번 들어가면 나올 수 없다',h:'죽음의 사막'},
+  {r:'6-10',tag:'⭐',q:'고비사막에서 고비는 무슨 뜻인가?',a:'생물이 살지 않는 건조한 지대',h:'몽골어'},
+  {r:'6-10',tag:'⭐🩷',q:'역대 72명의 왕이 봉선을 올린 천하제일 명산은?',a:'태산(타이산)',h:'동악, 산둥성'},
+  {r:'6-10',tag:'⭐',q:'소림사가 위치한 산은?',a:'숭산(중악)',h:'72개 봉우리, 72개 사찰'},
+  {r:'6-10',tag:'⭐🩷',q:'진시황이 채택한 사상은?',a:'법가사상',h:'강력한 법치주의'},
+  {r:'6-10',tag:'⭐',q:'진시황이 유가사상 제거를 위해 한 일은?',a:'분서갱유',h:'경전을 불태움'},
+  {r:'6-10',tag:'⭐',q:'중국 불교 4대 명산을 모두 쓰시오',a:'구화산(안휘성), 보타산(주산군도), 아미산(사천성), 오대산(산서성)',h:'4개 모두'},
+  {r:'6-10',tag:'⭐',q:'일출·운해·불광으로 유명한 산은?',a:'아미산',h:'사천성, 불교 4대 명산'},
+  {r:'6-10',tag:'⭐',q:'도교의 발상지이자 이백이 유년시절을 보낸 산은?',a:'청성산',h:'사천성'},
+  {r:'6-10',tag:'⭐',q:'청성산에 있는 도교 사원 이름은?',a:'상청궁',h:'도교 사원'},
+  {r:'6-10',tag:'⭐🩷',q:'시성과 시선은 각각 누구인가?',a:'시성=두보, 시선=이백',h:'당나라 대표 시인'},
+  {r:'6-10',tag:'⭐',q:'당나라의 기이한 이야기를 전하는 소설 장르는?',a:'전기',h:'작가 상상력에 기초'},
+  {r:'6-10',tag:'⭐',q:'송나라 때 전문 이야기꾼을 무엇이라 하는가?',a:'설화인',h:'화본소설의 기원'},
+  {r:'6-10',tag:'⭐',q:'설화인의 이야기를 옮겨 적은 소설을 무엇이라 하는가?',a:'화본소설',h:'구어체로 쓰임'},
+  {r:'6-10',tag:'⭐🩷',q:'중국의 4대 기서를 모두 쓰시오',a:'수호지, 삼국지연의, 서유기, 금병매',h:'원대 2개+명대 2개'},
+  {r:'6-10',tag:'⭐🩷',q:'시경은 어느 시대 어느 지역 서민들의 노랫말 모음인가?',a:'춘추시대 황하 유역',h:'북방 문학 대표'},
+  {r:'6-10',tag:'⭐🩷',q:'초사의 대표 작가는?',a:'굴원',h:'남방 문학 대표'},
+  {r:'6-10',tag:'⭐🩷',q:'시경과 초사 중 작자가 미상인 것은?',a:'시경',h:'초사는 굴원'},
+  {r:'6-10',tag:'⭐🩷',q:'중국에서 가장 긴 강과 그 길이는?',a:'장강, 6300km',h:'세계 3번째'},
+  {r:'6-10',tag:'⭐',q:'중국 고대문명 발상지 강은?',a:'황하',h:'북방문화 대표'},
+  {r:'6-10',tag:'⭐',q:'검은 뱀(흑룡)이 산다는 전설의 강은?',a:'흑룡강',h:'짙은 흑갈색'},
+  {r:'6-10',tag:'⭐',q:'중국 경제성장을 상징하는 강은?',a:'주강',h:'1990년대 개혁개방'},
+  {r:'6-10',tag:'⭐🩷',q:'악양루가 위치한 호수는?',a:'동정호',h:'호남성 북부, 담수호'},
+  {r:'6-10',tag:'⭐',q:'동정호 안의 섬 이름과 거기서 나는 명차는?',a:'군산, 군산은침차',h:'찻잎이 수직으로 올라감'},
+  {r:'6-10',tag:'⭐🩷',q:'만리장성의 서쪽 끝과 동쪽 끝은?',a:'서쪽=가욕관, 동쪽=산해관',h:'가욕관-산해관 2700km'},
+  {r:'6-10',tag:'⭐🩷',q:'창어 유래 고사의 이름은?',a:'예사십일',h:'태양 10개→예가 9개 격추'},
+  {r:'6-10',tag:'⭐🩷',q:'창어 유래를 약술하시오',a:'예사십일 고사 유래. 예가 태양 9개 격추→불사약→아내 창어(상아)가 훔쳐먹고 달로 도망→옥토끼와 삶→달 탐사선 이름을 창어로 명명',h:'예→창어→달→옥토끼→탐사선',essay:true},
+
+  {r:'11-15',tag:'⭐🩷',q:'중국의 소수민족 수는?',a:'55개 (총 56개 민족)',h:'한족 92%'},
+  {r:'11-15',tag:'⭐',q:'나시족이 사용하는 문자는?',a:'동파문자',h:'갑골문보다 오래됨'},
+  {r:'11-15',tag:'⭐🩷',q:'춘절에 대문에 좋은 글귀를 적어 붙이는 것은?',a:'춘련',h:'10세기부터 시작'},
+  {r:'11-15',tag:'⭐🩷',q:'중국인들이 신년에 복(福)자를 거꾸로 다는 이유는?',a:'거꾸로 도와 이를 도의 발음이 같아 복이 들어오라는 의미',h:'발음이 같음'},
+  {r:'11-15',tag:'⭐🩷',q:'춘절에 북방에서 먹는 음식은?',a:'교자(갱새교자)',h:'물만두'},
+  {r:'11-15',tag:'🩷',q:'춘절에 남방에서 먹는 음식은?',a:'니엔까오(떡)',h:'해마다 좋아진다는 발음과 유사'},
+  {r:'11-15',tag:'🩷',q:'춘절의 또 다른 이름은?',a:'꾸어니엔',h:'새해 인사: 신니엔콰일러'},
+  {r:'11-15',tag:'⭐',q:'원소절의 날짜와 다른 이름은?',a:'음력 정월 15일, 등절',h:'새해 첫 보름달'},
+  {r:'11-15',tag:'⭐🩷',q:'단오절 날짜는?',a:'음력 5월 5일',h:'시인절이라고도 함'},
+  {r:'11-15',tag:'⭐🩷',q:'단오절과 관련된 초나라 시인은?',a:'굴원',h:'멱라강에 투신'},
+  {r:'11-15',tag:'⭐',q:'단오절에 먹는 음식은?',a:'쫑즈(종자)',h:'물고기 시신 훼손 막기 위해'},
+  {r:'11-15',tag:'⭐',q:'단오절에 하는 놀이는?',a:'용주경기',h:'배를 저어 굴원 시신 찾으러'},
+  {r:'11-15',tag:'⭐🩷',q:'단오절 유래를 약술하시오',a:'초나라 시인 굴원이 누명을 쓰고 멱라강에 투신. 마을 사람들이 배를 저어 구하러 감(용주경기 유래). 물고기가 시신 훼손 못 하도록 강에 먹이 던짐(쫑즈 유래).',h:'굴원→멱라강→용주경기→쫑즈',essay:true},
+  {r:'11-15',tag:'⭐',q:'중추절 날짜는?',a:'음력 8월 15일',h:'가을의 한가운데'},
+  {r:'11-15',tag:'⭐🩷',q:'중추절에 먹는 음식은?',a:'월병',h:'둥근 보름달 상징'},
+  {r:'11-15',tag:'⭐🩷',q:'부녀절은 몇 월 며칠인가? (양력/음력도 구분)',a:'양력 3월 8일',h:'음력 아님! 주의'},
+  {r:'11-15',tag:'⭐🩷',q:'국경절은 몇 월 며칠인가?',a:'10월 1일',h:'중화인민공화국 탄생 선포일'},
+  {r:'11-15',tag:'🩷',q:'아동절은 몇 월 며칠인가?',a:'6월 1일',h:'세계 아동의 날'},
+  {r:'11-15',tag:'⭐',q:'건당절(공산당 창립기념일)은 몇 월 며칠인가?',a:'7월 1일',h:'1921년 창립'},
+  {r:'11-15',tag:'⭐',q:'건군절(인민해방군 창군일)은 몇 월 며칠인가?',a:'8월 1일',h:'인민해방군'},
+
+  {r:'16-20',tag:'⭐🩷',q:'만두(만토우)와 관련된 역사 인물은?',a:'제갈량',h:'노수를 건널 때 오랑캐 머리 대신'},
+  {r:'16-20',tag:'⭐',q:'만두와 포자의 차이는?',a:'만두=속 없음(밀가루만), 포자=속 있음',h:'빠오즈=포자'},
+  {r:'16-20',tag:'⭐🩷',q:'한국 최초의 짜장면집 이름과 위치는?',a:'공화춘, 인천 차이나타운',h:'청나라 때'},
+  {r:'16-20',tag:'⭐🩷',q:'짜장면이 한국에 들어오게 된 역사적 사건은?',a:'임오군란',h:'산동 지방 화교'},
+  {r:'16-20',tag:'⭐🩷',q:'짜장면을 들여온 화교의 출신 지방은?',a:'산동(지방)',h:'중국의 대표 밀 생산지'},
+  {r:'16-20',tag:'⭐🩷',q:'곰보 자국 있는 할머니에서 유래한 사천 두부 요리는?',a:'마파두부',h:'마=곰보, 파=할머니'},
+  {r:'16-20',tag:'⭐',q:'삼겹살을 소흥주에 넣고 졸인 상해 요리는?',a:'동파육(홍사오러우)',h:'소동파가 개발'},
+  {r:'16-20',tag:'⭐🩷',q:'승려가 담장을 뛰어넘는다는 뜻의 음식은?',a:'불도장',h:'귀한 손님 대접'},
+  {r:'16-20',tag:'⭐🩷',q:'한족과 만주족의 융합을 위한 코스요리는?',a:'만한전석',h:'강희제가 60번째 생일에'},
+  {r:'16-20',tag:'⭐🩷',q:'만한전석을 만든 황제는?',a:'강희제',h:'한족+만주족 융합'},
+  {r:'16-20',tag:'⭐🩷',q:'식탁에서 식탁을 만드는 후견인을 무엇이라 하는가?',a:'주방선생',h:'상나라 재상 이윤'},
+  {r:'16-20',tag:'⭐🩷',q:'주방선생의 대표 인물(상나라 재상)은?',a:'이윤',h:'지금의 국무총리'},
+  {r:'16-20',tag:'⭐🩷',q:'질투를 식초를 마신다고 표현하게 된 유래는?',a:'당태종이 임환 아내에게 독주를 마시라 했는데 사실 식초였음. 이후 질투=식초를 마신다고 표현.',h:'당태종·임환 이야기'},
+  {r:'16-20',tag:'🩷',q:'중국 식사에서 음식 먹는 순서는?',a:'요리→주식(밥)→탕',h:'탕은 마지막'},
+  {r:'16-20',tag:'⭐🩷',q:'근대 인기 혼수 3전은?',a:'선풍기, 자전거, 재봉틀',h:'20세기 초반'},
+
+  {r:'21-24',tag:'⭐🩷',q:'다경을 쓴 사람과 그의 별명은?',a:'육우, 다성(차의 성인)',h:'차의 백과사전'},
+  {r:'21-24',tag:'⭐',q:'차를 최초로 발견한 전설 속 인물은?',a:'신농',h:'72가지 독 해독'},
+  {r:'21-24',tag:'⭐',q:'다이어트 차로 유명한 후발효차는?',a:'보이차',h:'운남성 보이 마을'},
+  {r:'21-24',tag:'⭐',q:'검은 뱀(흑룡) 고사에서 이름이 유래한 차는?',a:'오룡차',h:'반발효차'},
+  {r:'21-24',tag:'⭐🩷',q:'동정호 안 군산섬에서 나는 명차는?',a:'군산은침차',h:'뜨거운 물 부으면 수직으로 올라감'},
+  {r:'21-24',tag:'⭐',q:'홍차는 어떻게 만들어졌는가?',a:'중국 도자기를 유럽 수출 시 찻잎을 넣었는데 더운 날씨로 발효되어 홍차가 됨',h:'실크로드 교역'},
+  {r:'21-24',tag:'⭐',q:'발효 정도 0%인 불발효차의 종류는?',a:'녹차, 용정차',h:'녹색 유지'},
+  {r:'21-24',tag:'⭐',q:'반발효차(10~65%)의 대표 종류는?',a:'오룡차, 철관음',h:'오룡차가 대표'},
+  {r:'21-24',tag:'⭐',q:'발효차(85% 이상)의 대표는?',a:'홍차',h:'등홍색'},
+  {r:'21-24',tag:'⭐',q:'후발효차의 대표는?',a:'보이차(흑차)',h:'곰팡이로 재발효'},
+  {r:'21-24',tag:'🩷',q:'물고기 머리는 항상 어느 쪽으로 향하는가?',a:'손님 쪽',h:'식사 예절'},
+  {r:'21-24',tag:'🩷',q:'숟가락으로는 무엇을, 젓가락으로는 무엇을 먹는가?',a:'숟가락=탕, 젓가락=면·쌀밥',h:'수저 사용법'},
+
+  {r:'25-30',tag:'⭐🩷',q:'소흥주를 20년 이상 숙성시키면 무엇이라 부르는가?',a:'여아홍',h:'딸 태어날 때 담가 결혼 때 마심'},
+  {r:'25-30',tag:'⭐',q:'여아홍의 유래는?',a:'딸이 태어날 때 담가 결혼할 때 꺼내 마시는 술',h:'여(女)아(兒)홍(紅)'},
+  {r:'25-30',tag:'⭐🩷',q:'중국의 국주는?',a:'마오타이(모태주)',h:'귀주성, 53도'},
+  {r:'25-30',tag:'⭐',q:'마오타이의 생산지는?',a:'귀주성',h:'분지·안개·고온 특수 환경'},
+  {r:'25-30',tag:'⭐',q:'마오타이는 세계 3대 명주 중 하나인데 나머지 2개는?',a:'프랑스 코냑, 영국 스카치위스키',h:'세계 3대 명주'},
+  {r:'25-30',tag:'⭐🩷',q:'경극의 4대 표현방식을 모두 쓰시오',a:'창(노래), 염(대사), 주(동작), 타(곡예)',h:'창염주타'},
+  {r:'25-30',tag:'⭐🩷',q:'경극의 4대 배역을 모두 쓰시오',a:'생(남자), 단(여자), 정(화려한 분장), 축(해학적)',h:'생단정축'},
+  {r:'25-30',tag:'⭐🩷',q:'경극에서 남자 배역은?',a:'생',h:'생단정축 중'},
+  {r:'25-30',tag:'⭐🩷',q:'경극에서 여자 배역은?',a:'단',h:'매란방이 단 배우'},
+  {r:'25-30',tag:'⭐🩷',q:'경극 검보에서 흰색 얼굴이 상징하는 성격과 대표 인물은?',a:'음흉하고 교활한 성격, 조조',h:'흰색=교활'},
+  {r:'25-30',tag:'⭐🩷',q:'경극 검보에서 검정색 얼굴이 상징하는 성격과 대표 인물은?',a:'강직하고 공명정대한 성격, 장비·포청천',h:'검정=공명정대'},
+  {r:'25-30',tag:'⭐🩷',q:'경극 검보에서 홍색 얼굴이 상징하는 성격과 대표 인물은?',a:'혈기왕성하고 충성스러운 성격, 관우',h:'홍색=충성'},
+  {r:'25-30',tag:'⭐🩷',q:'경극 악기 4종을 모두 쓰시오',a:'이호(얼후), 월금, 비파, 반',h:'그림 문제로도 출제'},
+  {r:'25-30',tag:'⭐',q:'이호(얼후)는 언제 어디서 들여온 악기인가?',a:'원나라 때 몽골에서 들여옴',h:'2줄 악기'},
+  {r:'25-30',tag:'⭐',q:'월금은 어떤 모양의 악기인가?',a:'보름달처럼 둥근 악기',h:'동그란 기타 모양'},
+  {r:'25-30',tag:'⭐',q:'비파 이름의 유래는?',a:'밖으로 타면 비, 안으로 타면 파 소리가 남',h:'눈물방울 모양'},
+  {r:'25-30',tag:'⭐',q:'반의 역할은?',a:'경극 반주에서 시작·끝·박자를 알려주는 악기',h:'나무 박자판'},
+  {r:'25-30',tag:'⭐🩷',q:'최고의 경극 단(여자) 배우는?',a:'매란방',h:'본명 하오팅'},
+  {r:'25-30',tag:'⭐',q:'매란방을 극찬한 서양 유명인은?',a:'찰리 채플린',h:'최고의 여장 연기자'},
+  {r:'25-30',tag:'⭐🩷',q:'유명 경극 영화는?',a:'패왕별희',h:'장국영·공리 주연, 항우와 우희'},
+  {r:'25-30',tag:'🩷',q:'희곡의 기원은?',a:'고대 무격',h:'신의 모습으로 분장하고 춤추고 노래'},
+
+  {r:'31-35',tag:'⭐🩷',q:'중국 봉건사회의 3대 악습은?',a:'전족, 환관, 과거제도',h:'3개 모두'},
+  {r:'31-35',tag:'⭐🩷',q:'전족이란 무엇인가?',a:'여성의 발을 어릴 때부터 성장하지 못하도록 꽁꽁 동여매던 풍습',h:'봉건시대 유물'},
+  {r:'31-35',tag:'🩷',q:'삼촌금련이란 무엇인가?',a:'전족한 발은 세 치의 금 연꽃, 약 10cm',h:'전족한 발 크기'},
+  {r:'31-35',tag:'🩷',q:'상류층 전족 전문가를 무엇이라 하는가?',a:'발할미',h:'솜씨 좋아 고통이 덜함'},
+  {r:'31-35',tag:'⭐🩷',q:'전통 결혼 육례의 순서를 모두 쓰시오',a:'납채→문명→납길→납징→청기→친영',h:'6단계 순서'},
+  {r:'31-35',tag:'⭐🩷',q:'육례의 첫 번째 단계는?',a:'납채',h:'신랑측 구혼, 기러기'},
+  {r:'31-35',tag:'⭐🩷',q:'혼약의 성립을 의미하는 육례 단계는?',a:'납징',h:'남→여 예물 보냄'},
+  {r:'31-35',tag:'⭐🩷',q:'육례의 마지막 단계는?',a:'친영',h:'신부 집에서 신부 맞이'},
+  {r:'31-35',tag:'🩷',q:'신중국 건국 이후 법정 결혼 연령은?',a:'남 22세, 여 20세',h:'건국 이전은 남20·여18'},
+  {r:'31-35',tag:'⭐🩷',q:'20세기 초반 근대 인기 혼수 3전은?',a:'선풍기, 자전거, 재봉틀',h:'3개 모두'},
+  {r:'31-35',tag:'⭐🩷',q:'마오쩌둥이 여성 해방을 뜻하며 외친 말은?',a:'빤삐엔티엔',h:'천안문광장 1949년'},
+  {r:'31-35',tag:'⭐🩷',q:'빤삐엔티엔의 뜻은?',a:'여성도 하늘의 절반을 떠받들 수 있다',h:'여성 해방 선언'},
+  {r:'31-35',tag:'⭐🩷',q:'대약진운동의 결과 여성에게 어떤 변화가 있었는가?',a:'여성들의 사회 참여가 증가하였다',h:'공동 탁아소·공동 식당'},
+  {r:'31-35',tag:'⭐🩷',q:'대약진운동의 진짜 목적은?',a:'여성 지위 상승이 아닌 노동력 확보',h:'사회주의 개조를 위한 대증산'},
+  {r:'31-35',tag:'⭐🩷',q:'한자를 처음 만든 전설 속 인물은?',a:'창힐',h:'황제의 사관, 눈이 4개'},
+  {r:'31-35',tag:'⭐🩷',q:'중국 최초의 한자는?',a:'갑골문',h:'거북이 배딱지'},
+  {r:'31-35',tag:'🩷',q:'갑골문을 중국 최초의 문자로 재탄생시킨 인물은?',a:'왕의영',h:'1899년'},
+  {r:'31-35',tag:'⭐🩷',q:'한자 변천 순서를 순서대로 쓰시오',a:'도문→갑골문→금문→대전→소전→예서→초서→해서→행서',h:'9단계'},
+  {r:'31-35',tag:'🩷',q:'최초의 한자 개혁으로 소전을 만든 인물은?',a:'진시황',h:'대전을 개량'},
+  {r:'31-35',tag:'🩷',q:'예서를 만든 진나라 인물은?',a:'정막',h:'하급 관리 실용 문자'},
+  {r:'31-35',tag:'⭐',q:'가장 모범적인 한자체는?',a:'해서',h:'오늘날 사용'},
+  {r:'31-35',tag:'⭐',q:'예서를 빠르게 휘갈겨 쓴 것은?',a:'초서',h:'알아보기 힘들어 서예로'},
+
+  {r:'essay',tag:'⭐🩷',q:'[약술형] 창어 유래를 서술하시오',a:'예사십일 고사에서 유래. 하루에 태양이 10개 떠올라 예가 활로 9개를 쏘아 떨어뜨렸고 옥황상제에게 불사약을 받았다. 예의 아내 창어(상아)가 약을 몰래 훔쳐 먹고 달나라로 도망가 옥토끼와 함께 살게 되었다. 이 전설 속 인물 이름을 따서 달 탐사선을 창어라고 명명하였다.',h:'예사십일→예→창어→달→옥토끼→탐사선',essay:true},
+  {r:'essay',tag:'⭐🩷',q:'[약술형] 단오절에 쫑즈를 먹고 용주경기를 하는 역사적 배경을 서술하시오',a:'초나라 애국시인 굴원이 억울한 누명을 쓰고 음력 5월 5일 멱라강에 투신하였다. 마을 사람들이 배를 저어 시신을 찾으러 갔으나 구하지 못했고(용주경기 유래), 물고기가 시신을 훼손하지 못하도록 강에 먹이를 던졌다(쫑즈 유래).',h:'굴원→멱라강→용주경기→쫑즈',essay:true},
+  {r:'essay',tag:'⭐🩷',q:'[약술형] 서고동저 지형이 중국 문화에 끼친 영향을 서술하시오',a:'서쪽이 높고 동쪽이 낮은 서고동저 4급계 지형으로, 대부분의 강이 서쪽에서 동쪽으로 흐른다. 강 유역에 비옥한 토지가 형성되어 농업과 문명이 발달하였다. 북방 지역은 교통이 불편해 남방과 북방이 각기 고유한 문화를 형성하게 되었다.',h:'서→동 / 농업발달 / 남북문화 분리',essay:true},
+];
+
+let curQs=[], ans={}, wrongList=[];
+
+function tagHTML(t){
+  if(t==='⭐🩷') return '<span class="tag tag-both">⭐🩷 둘다출제</span>';
+  if(t==='⭐') return '<span class="tag tag-star">⭐ 에브리타임</span>';
+  return '<span class="tag tag-pink">🩷 분홍족보</span>';
+}
+
+function startQuiz(range){
+  ans={}; wrongList=[];
+  curQs = (range==='all'?[...Q]:Q.filter(q=>q.r===range)).sort(()=>Math.random()-0.5);
+  renderQuiz();
+}
+
+function retryWrong(){
+  if(!wrongList.length){goBack();return;}
+  curQs=[...wrongList].sort(()=>Math.random()-0.5);
+  ans={}; wrongList=[];
+  renderQuiz();
+}
+
+function renderQuiz(){
+  show('quiz-section'); hide('selector'); hide('result-section');
+  updateProg(0,0);
+  const c=document.getElementById('q-container');
+  c.innerHTML='';
+  curQs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='question-card'; d.id='qc'+i;
+    const inp = q.essay
+      ? `<textarea class="answer-textarea" id="ans${i}" placeholder="서술형 답안을 입력하세요..."></textarea>`
+      : `<input class="answer-input" type="text" id="ans${i}" placeholder="정답을 입력하세요..." onkeydown="if(event.key==='Enter')checkOne(${i})">`;
+    const essayNote = q.essay ? `<div class="essay-note">📝 서술형 — 핵심 키워드 위주로 작성 후 채점 버튼을 눌러 모범답안과 비교하세요</div>` : '';
+    d.innerHTML=`
+      <div class="q-meta">${tagHTML(q.tag)}<span class="q-num">문제 ${i+1}/${curQs.length}</span></div>
+      <div class="q-text">${q.q}</div>
+      ${essayNote}
+      ${inp}
+      <div class="reveal" id="rv${i}"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="checkOne(${i})">확인 ✓</button>
+        <button class="btn btn-hint" onclick="showHint(${i})">💡 힌트</button>
+      </div>`;
+    c.appendChild(d);
+  });
+}
+
+function norm(s){return s.replace(/\s+/g,'').replace(/[,·~→\-·。]/g,'').toLowerCase();}
+
+function checkOne(i){
+  if(ans[i]!==undefined) return;
+  const inp=document.getElementById('ans'+i);
+  const rv=document.getElementById('rv'+i);
+  const card=document.getElementById('qc'+i);
+  const user=inp.value.trim();
+  const correct=curQs[i].a;
+  const isEssay=!!curQs[i].essay;
+
+  let ok=false;
+  if(!isEssay && user.length>0){
+    const nu=norm(user), nc=norm(correct);
+    ok = nu===nc || nc.includes(nu) || nu.includes(nc.substring(0,Math.floor(nc.length*0.65)));
+  }
+
+  if(isEssay){
+    ans[i]='essay';
+    rv.innerHTML=`<div style="margin-bottom:6px;font-weight:600;color:var(--blue)">📋 모범답안</div><div style="line-height:1.8">${correct}</div><div class="reveal-hint">💡 ${curQs[i].h}</div>`;
+    rv.classList.add('show');
+    inp.disabled=true;
+  } else {
+    ans[i]=ok;
+    if(!ok) wrongList.push(curQs[i]);
+    inp.disabled=true;
+    inp.classList.add(ok?'correct-inp':'wrong-inp');
+    card.classList.add(ok?'answered-correct':'answered-wrong');
+    rv.innerHTML=ok
+      ? `<span class="reveal-correct">✓ 정답!</span><div class="reveal-ans">모범답안: ${correct}</div>`
+      : `<span class="reveal-wrong">✗ 틀렸습니다</span><div class="reveal-ans" style="color:var(--green-text);font-weight:600">정답: ${correct}</div><div class="reveal-hint">💡 ${curQs[i].h}</div>`;
+    rv.classList.add('show');
+    const done=Object.keys(ans).length;
+    const okC=Object.values(ans).filter(v=>v===true).length;
+    updateProg(done,okC);
+  }
+}
+
+function showHint(i){
+  if(ans[i]!==undefined) return;
+  const rv=document.getElementById('rv'+i);
+  rv.innerHTML=`<span class="reveal-hint">💡 힌트: ${curQs[i].h}</span>`;
+  rv.classList.add('show');
+}
+
+function checkAll(){
+  curQs.forEach((_,i)=>{ if(ans[i]===undefined){ const inp=document.getElementById('ans'+i); if(inp&&!inp.disabled) checkOne(i); }});
+  showResult();
+}
+
+function showResult(){
+  const total=curQs.length;
+  const correct=Object.values(ans).filter(v=>v===true).length;
+  const essayCount=Object.values(ans).filter(v=>v==='essay').length;
+  const gradable=total-essayCount;
+  const pct=gradable>0?Math.round((correct/gradable)*100):100;
+  hide('quiz-section');
+  const rs=document.getElementById('result-section');
+  rs.classList.add('show');
+  document.getElementById('res-pct').textContent=pct+'%';
+  document.getElementById('res-ok').textContent=correct+(essayCount>0?' (+'+essayCount+'서술형)':'');
+  document.getElementById('res-no').textContent=gradable-correct;
+  const msgs=['다시 한번 암기하고 도전해봐! 🔥','절반 왔어! 한 번 더 돌리면 돼 🔁','잘 하고 있어! 틀린 것만 다시 보자 📖','거의 다 왔어! 마지막 점검 💪','완벽해! 시험 잘 볼 수 있어 🎉'];
+  document.getElementById('res-msg').textContent=msgs[Math.min(4,Math.floor(pct/20))];
+  wrongList=[...new Set(wrongList)];
+}
+
+function updateProg(done,ok){
+  const t=curQs.length;
+  const pct=t>0?Math.round((done/t)*100):0;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-text').textContent=done+' / '+t+' 완료';
+  document.getElementById('badge-ok').textContent='맞음 '+ok;
+  document.getElementById('badge-no').textContent='틀림 '+(done-ok);
+}
+
+function show(id){document.getElementById(id).classList.remove('hidden');}
+function hide(id){document.getElementById(id).classList.add('hidden');}
+function goBack(){
+  ans={}; wrongList=[];
+  hide('quiz-section'); hide('result-section');
+  document.getElementById('result-section').classList.remove('show');
+  show('selector');
+  document.getElementById('q-container').innerHTML='';
+}
+</script>
+</body>
+</html>
