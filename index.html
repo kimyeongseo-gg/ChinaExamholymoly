@@ -312,6 +312,23 @@ const Q=[
 
 let curQs=[],ans={},wrongList=[],curIdx=0;
 
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter') return;
+  const qs=document.getElementById('quiz-section');
+  if(!qs||qs.classList.contains('hidden')) return;
+  // 현재 current 카드 찾기
+  const cur=document.querySelector('.qcard.current');
+  if(!cur) return;
+  const i=parseInt(cur.id.replace('qc',''));
+  if(isNaN(i)) return;
+  e.preventDefault();
+  if(ans[i]===undefined){
+    checkOne(i);
+  } else {
+    scrollToNext(i);
+  }
+});
+
 function tagHTML(t){
   if(t==='⭐🩷') return '<span class="tag tag-both">⭐🩷 둘다출제</span>';
   if(t==='⭐') return '<span class="tag tag-star">⭐ 에브리타임</span>';
@@ -342,7 +359,7 @@ function renderQuiz(){
     d.className='qcard'+(i===0?' current':''); d.id='qc'+i;
     const inp=q.essay
       ? `<textarea class="ans-ta" id="ans${i}" placeholder="서술형 답안을 입력하세요..."></textarea>`
-      : `<input class="ans-inp" type="text" id="ans${i}" placeholder="정답을 입력하세요..." onkeydown="handleKey(event,${i})">`;
+      : `<input class="ans-inp" type="text" id="ans${i}" placeholder="정답을 입력하세요...">`;
     const enote=q.essay?`<div class="essay-note">📝 서술형 — 핵심 키워드 위주로 작성 후 확인 버튼 클릭</div>`:'';
     const ehint=!q.essay?`<div class="enter-hint">⏎ 엔터로 채점 후 다음 문제로 이동</div>`:'';
     d.innerHTML=`
@@ -360,16 +377,6 @@ function renderQuiz(){
   setTimeout(()=>{const el=document.getElementById('ans0');if(el)el.focus();},100);
 }
 
-function handleKey(e,i){
-  if(e.key==='Enter'){
-    e.preventDefault();
-    if(ans[i]===undefined){
-      checkOne(i);
-    } else {
-      scrollToNext(i);
-    }
-  }
-}
 
 function scrollToNext(i){
   const next=i+1;
